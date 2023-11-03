@@ -7,8 +7,13 @@ import model.Empleado;
 import java.util.InputMismatchException;
 import javax.management.InvalidAttributeValueException;
 
+/**
+ * Alvaro Márquez, Achraf Boujaanan, David Martin
+ */
+
 public class Main {
 	public static void main(String[] args) {
+		
 		Gestion g = new Gestion();
 		int opc = 0;
 		int opc2 = 0;
@@ -73,6 +78,10 @@ public class Main {
 		} while (opc != 0);
 	}
 
+	/**
+	 * Metodo de añadir departamento
+	 * @param bd
+	 */
 	private static void addDepartamento(Gestion bd) {
 		String nombre;
 		IO.println("Introduce el nombre");
@@ -80,6 +89,10 @@ public class Main {
 		IO.println(bd.addDepartamento(new Departamento(nombre, null)) ? "Añadido" : "No se ha añadido");
 	}
 
+	/**
+	 * Metodo para añadir empleado
+	 * @param bd
+	 */
 	private static void addEmpleado(Gestion bd) {
 		Double salario;
 		String nombre;
@@ -94,6 +107,10 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Metodo para modificar el departamento
+	 * @param bd
+	 */
 	private static void modifyDepartamento(Gestion bd) {
 		Integer id, idJefe;
 		String nombre;
@@ -111,6 +128,10 @@ public class Main {
 				: "No se ha añadido");
 	}
 
+	/**
+	 * Metodo para borrar departamento
+	 * @param bd
+	 */
 	private static void deleteDepartamento(Gestion bd) {
 		Integer id;
 		IO.println(bd.showDepartamentos());
@@ -120,6 +141,10 @@ public class Main {
 				: "No se ha podido eliminar el departamento");
 	}
 
+	/**
+	 * Metodo para borrar empleado
+	 * @param bd
+	 */
 	private static void deleteEmpleado(Gestion bd) {
 		Integer id;
 		IO.println(bd.showEmpleados());
@@ -129,11 +154,19 @@ public class Main {
 				: "No se ha podido eliminar el empleado");
 	}
 
+	/**
+	 * Metodo para cerrar la Base de Datos
+	 * @param bd
+	 */
 	private static void closeBD(Gestion bd) {
 		IO.println("Saliendo..");
 		bd.close();
 	}
 
+	/**
+	 * Metodo para modificar empleado
+	 * @param bd
+	 */
 	private static void modifyEmpleado(Gestion bd) {
 		Integer id;
 		Empleado empleado;
@@ -174,12 +207,17 @@ public class Main {
 				IO.println(bd.showDepartamentos());
 				IO.println("Introduzca el id del nuevo departamento: ");
 				idDepartamento = IO.readInt();
-
-				if (bd.updateOldDepartamento(empleado.getDepartamento().getId())) {
-					empleado.setDepartamento(bd.buscarDepartamentoPorId(idDepartamento));
-				} else {
-					IO.println("No se pudo modificar el departamento del empleado.\n");
+				if (empleado.getDepartamento() != null) {
+					if (bd.updateOldDepartamento(empleado.getDepartamento().getId())) {
+						empleado.setDepartamento(bd.buscarDepartamentoPorId(idDepartamento));
+					} else {
+						IO.println("No se pudo modificar el departamento del empleado.\n");
+					}
 				}
+				else {
+					empleado.setDepartamento(bd.buscarDepartamentoPorId(idDepartamento));
+				}
+				
 
 				break;
 			case 0:
@@ -195,6 +233,9 @@ public class Main {
 
 	}
 
+	/**
+	 * Menu
+	 */
 	private static void menuPrincipal() {
 		IO.println("1)\tEmpleados");
 		IO.println("2)\tDepartamentos");
@@ -203,6 +244,9 @@ public class Main {
 		IO.println("Elige la opcion deseada");
 	}
 
+	/**
+	 * Menu de empleado
+	 */
 	private static void menuEmpleado() {
 		IO.println("1)\tCrear empleado");
 		IO.println("2)\tBorrar empleado");
@@ -213,6 +257,9 @@ public class Main {
 		IO.println("Elige la opcion deseada");
 	}
 
+	/**
+	 * Menu Departamento
+	 */
 	private static void menuDepartamento() {
 		IO.println("1)\tCrear departamento");
 		IO.println("2)\tBorrar departamento");

@@ -9,18 +9,33 @@ import javax.management.InvalidAttributeValueException;
 import model.Departamento;
 import model.Empleado;
 
+/**
+ * Alvaro Márquez, Achraf Boujaanan, David Martin
+ */
+
 public class Gestion {
 	private Connection conn = null;
 
+	/**
+	 * Constructor de gestion de base de datos
+	 */
 	public Gestion() {
 		conn = BD.open();
 		createTables();
 	}
 
+	/**
+	 * Metodo para cerrar la base de datos
+	 */
 	public void close() {
 		BD.close();
 	}
 
+	/**
+	 * Metodo para añadir departamento
+	 * @param departamento
+	 * @return
+	 */
 	public boolean addDepartamento(Departamento departamento) {
 		String sentencia = "INSERT INTO DEPARTAMENTOS (NOMBRE, JEFE) VALUES (?, ?)";
 		PreparedStatement ps;
@@ -40,6 +55,11 @@ public class Gestion {
 		return anadido;
 	}
 
+	/**
+	 * Metodo para añadir empleado
+	 * @param empleado
+	 * @return
+	 */
 	public boolean addEmpleado(Empleado empleado) {
 		String sql = "INSERT INTO EMPLEADOS (NOMBRE, SALARIO, DEPARTAMENTO) VALUES (?, ?, ?)";
 		PreparedStatement ps;
@@ -60,6 +80,11 @@ public class Gestion {
 		return anadido;
 	}
 
+	/**
+	 * Metodo para modificar departamento
+	 * @param departamento
+	 * @return
+	 */
 	public boolean modificarDepartamento(Departamento departamento) {
 		String sentencia = "UPDATE DEPARTAMENTOS SET NOMBRE = ?, JEFE = ? WHERE ID = ?";
 		PreparedStatement ps;
@@ -92,6 +117,13 @@ public class Gestion {
 		return departamentoModificado;
 	}
 
+	/**
+	 * Metodo para asignar nuevo jefe
+	 * @param NewDepartamentoId
+	 * @param idJefe
+	 * @return
+	 * @throws SQLException
+	 */
 	private boolean updateNewJefe(Integer NewDepartamentoId, Integer idJefe) throws SQLException {
 		String sentencia = "UPDATE EMPLEADOS SET DEPARTAMENTO = ? WHERE ID = ?";
 		PreparedStatement ps;
@@ -118,6 +150,11 @@ public class Gestion {
 		return updateRealizado;
 	}
 
+	/**
+	 * Metodo para modificar empleado
+	 * @param empleado
+	 * @return
+	 */
 	public boolean modificarEmpleado(Empleado empleado) {
 		String sentencia = "UPDATE EMPLEADOS SET NOMBRE = ?, SALARIO = ?, DEPARTAMENTO = ? WHERE ID = ?";
 		PreparedStatement ps;
@@ -151,6 +188,11 @@ public class Gestion {
 		return empleadoModificado;
 	}
 
+	/**
+	 * Metodo para updatear el departamento antiguo
+	 * @param idOldDepartamento
+	 * @return
+	 */
 	public boolean updateOldDepartamento(Integer idOldDepartamento) {
 		String sentencia = "UPDATE DEPARTAMENTOS SET JEFE = ? WHERE ID = ?";
 		PreparedStatement ps;
@@ -177,6 +219,11 @@ public class Gestion {
 		return departamentoModificado;
 	}
 
+	/**
+	 * MEtodo para borrar un departamento
+	 * @param idDepartamento
+	 * @return
+	 */
 	public boolean removeDepartamento(Integer idDepartamento) {
 		String sql1 = """
 				DELETE FROM DEPARTAMENTOS WHERE ID = ?
@@ -191,6 +238,11 @@ public class Gestion {
 		return false;
 	}
 
+	/**
+	 * Metodo para borrar empleado
+	 * @param idEmpleado
+	 * @return
+	 */
 	public boolean removeEmpleado(Integer idEmpleado) {
 		String sql1 = """
 				DELETE FROM EMPLEADOS WHERE ID = ?
@@ -206,6 +258,10 @@ public class Gestion {
 		return false;
 	}
 
+	/**
+	 * Metodo para mostrar departamentos
+	 * @return
+	 */
 	public String showDepartamentos() {
 		String sentencia = "SELECT * FROM DEPARTAMENTOS";
 		StringBuffer sb;
@@ -228,6 +284,11 @@ public class Gestion {
 		return "";
 	}
 
+	/**
+	 * Metodo para leer departamento
+	 * @param rs
+	 * @return
+	 */
 	private Departamento readDepartamento(ResultSet rs) {
 		Integer id;
 		String nombre;
@@ -246,6 +307,10 @@ public class Gestion {
 		return null;
 	}
 
+	/**
+	 * Metodo para mostrar empleados
+	 * @return
+	 */
 	public String showEmpleados() {
 		String sentencia = "SELECT * FROM EMPLEADOS";
 		StringBuffer sb;
@@ -269,6 +334,11 @@ public class Gestion {
 		return "";
 	}
 
+	/**
+	 * Metodo para leer departamento
+	 * @param rs
+	 * @return
+	 */
 	private Empleado readEmpleado(ResultSet rs) {
 		Integer id;
 		String nombre;
@@ -285,14 +355,17 @@ public class Gestion {
 
 			return empleado;
 
-		} catch (SQLException e) {
+		} catch (SQLException | InvalidAttributeValueException e) {
 			e.printStackTrace();
-		} catch (InvalidAttributeValueException e) {
-			e.getMessage();
 		}
 		return null;
 	}
 
+	/**
+	 * Metodo para buscar un empleado por ID
+	 * @param id
+	 * @return
+	 */
 	public Empleado buscarEmpleadoPorId(Integer id) {
 		String sentencia = "SELECT * FROM EMPLEADOS WHERE ID = ?";
 		ResultSet rs;
@@ -313,6 +386,11 @@ public class Gestion {
 		return null;
 	}
 
+	/**
+	 * Metodo para buscar un departamento por ID
+	 * @param id
+	 * @return
+	 */
 	public Departamento buscarDepartamentoPorId(Integer id) {
 
 		String sentencia = "SELECT * FROM DEPARTAMENTOS WHERE ID = ?";
@@ -334,12 +412,18 @@ public class Gestion {
 		return null;
 	}
 
+	/**
+	 * Metodo para borrar las tablas
+	 */
 	public void dropTables() {
 
 		dropTableDepartamento();
 		dropTableEmpleado();
 	}
 
+	/**
+	 * Metodo para borrar la tabla departamentos
+	 */
 	private void dropTableDepartamento() {
 		String sentencia = "DELETE FROM DEPARTAMENTOS";
 		try {
@@ -351,6 +435,9 @@ public class Gestion {
 
 	}
 
+	/**
+	 * MEtodo para borrar la tabla empleados
+	 */
 	private void dropTableEmpleado() {
 		String sentencia = "DELETE FROM EMPLEADOS";
 		try {
@@ -362,6 +449,9 @@ public class Gestion {
 
 	}
 
+	/**
+	 * Metodo para crear las tablas en sqlite y mariadb
+	 */
 	private void createTables() {
 		String sql1 = "";
 		String sql2 = "";
